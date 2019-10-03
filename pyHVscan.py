@@ -166,6 +166,7 @@ if __name__ == "__main__":
 		pyflash.set15VPowerEnable(DCRCs2FlashList,DCRC_15VPowerList)
 		#Cooldown
 		print('Cooldown '+ str(CoolDuration_sec)+' sec')
+		time.sleep(CoolDuration)
 		print('')
 
 	

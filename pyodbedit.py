@@ -6,17 +6,17 @@ import os
 
 #read from the odb
 def read(path):
-  return os.popen('odbedit -c "ls -v '+path+'"').read().strip()
+  return os.popen('odbedit -c \'ls -v \"'+path+'\"\'').read().strip()
 
 #write to the odb
 def write(path,val):
-  return os.popen('odbedit -c "set '+path+' '+val+'"').read().strip()
+  return os.popen('odbedit -c \'set \"'+path+'\" '+val+'\'').read().strip()
 
 #start a new run
 def runstart():
   #return os.popen('odbedit -c "start now"').read().strip() #What does now do?
-  return os.popen('odbedit -c "start"').read().strip()
+  return os.popen('odbedit -c start').read().strip()
 
 #stop the current run
 def runstop():
-  return os.popen('odbedit -c "stop"').read().strip()
+  return os.popen('odbedit -c stop').read().strip()

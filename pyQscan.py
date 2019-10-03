@@ -64,12 +64,12 @@ if __name__ == "__main__":
 	###########################
 	#Sequence
 	###########################
-	print 'Qbias Scan'
-	print 'COMMENT "Command to produce this script was: python '+" ".join(sys.argv[:])+'"'
+	print('Qbias Scan')
+	print('COMMENT "Command to produce this script was: python '+" ".join(sys.argv[:])+'"')
 	pyodbedit.write('/Logger/Write data','y')
 	pyodbedit.write('/Logger/Run duration',str(tSeries_sec))
 
-	print 'run/flash/cooldown loop'
+	print('run/flash/cooldown loop')
 	for iV, V in enumerate(Vlist):
 		#Set Qbias
 		pyodbedit.write('/Equipment/Tower01/Settings/DCRC'+str(DCRC_S1)+'/Charge/Bias (V)[0]',str(V[0]))
@@ -81,20 +81,20 @@ if __name__ == "__main__":
 		###########
 		#Take data
 		###########
-		print 'Take Data. Set '+str(iV+1)+'/'+str(len(Vlist))
+		print('Take Data. Set '+str(iV+1)+'/'+str(len(Vlist)))
 		pyodbedit.write('/Seriesinfo/Duration (s)',str(tSeries_sec))
 
 		for iSubSeries in range(nSubSeries):
 			if nSubSeries>1:
-				print 'SubSeries '+str(iSubSeries+1)+'/'+str(nSubSeries)
+				print('SubSeries '+str(iSubSeries+1)+'/'+str(nSubSeries))
 
-			print 'Start Run'
+			print('Start Run')
 			pyodbedit.runstart()
 
-			print 'Waiting'+ str(tSeries_sec)
+			print('Waiting'+ str(tSeries_sec))
 			time.sleep(tSeries_sec)
 
-			print 'Stop Run'
+			print('Stop Run')
 			pyodbedit.runstop()
 			
 		#Set Qbias = 0
@@ -107,26 +107,26 @@ if __name__ == "__main__":
 		###########
 		#Flash & cooldown
 		###########
-		print 'Flash and cooldown'
+		print('Flash and cooldown')
 		#Save 15V power settings and enable
 		DCRC_15VPowerList=pyflash.get15VPowerEnable(DCRCs2FlashList)
 		pyflash.turn15VPowerEnableOn(DCRCs2FlashList)
 
 		#Flash
 		pyflash.enableLEDs(DCRCs2FlashList,1)
-		print 'Wait '+ str(FlashDuration)+ ' sec'
+		print('Wait '+ str(FlashDuration)+ ' sec')
 		time.sleep(FlashDuration)
 		pyflash.enableLEDs(DCRCs2FlashList,0)
 		
 		#Restore previous 15V power state
 		pyflash.set15VPowerEnable(DCRCs2FlashList,DCRC_15VPowerList)
 		#Cooldown
-		print 'Cooldown '+ str(CoolDuration_sec)+' sec'
-		print
+		print('Cooldown '+ str(CoolDuration_sec)+' sec')
+		print('')
 
 	
 	#Return to normal settings
-	print
-	print 'Restore normal settings'
+	print('')
+	print('Restore normal settings')
 	pyodbedit.write('/Logger/Write data','n')
-	print 'Done'
+	print('Done')

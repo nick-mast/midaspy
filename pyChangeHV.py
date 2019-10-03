@@ -73,11 +73,11 @@ def setDCRCQI(iDCRC,V):
 #state=1 is on, state=0 is off
 def setHVpowerOnOff(iDCRC,state):
 	if state==1 or str(state).lower()=='on':
-		print 'Turn HV power supply ON'
+		print('Turn HV power supply ON')
 		pyodbedit.write('/Equipment/Tower01/Settings/DCRC'+str(iDCRC)+'/Charge/Bias (V)[1]', str(10))
 		time.sleep(5)
 	elif state==0 or str(state).lower()=='off':
-		print 'Turn HV power supply OFF'
+		print('Turn HV power supply OFF')
 		pyodbedit.write('/Equipment/Tower01/Settings/DCRC'+str(iDCRC)+'/Charge/Bias (V)[1]', str(0))
 		time.sleep(5)
 	else:
@@ -154,29 +154,29 @@ def main(args):
 	###########################
 	#Output Sequence
 	###########################
-	print 'Change HV bias from ' + str(HVstart) + ' V to ' + str(HVend) +' V using DCRC'+str(iDCRC)
-	print
+	print('Change HV bias from ' + str(HVstart) + ' V to ' + str(HVend) +' V using DCRC'+str(iDCRC))
+	print('')
 	###########
 	#Set HV
 	###########
 	if args.HVpreBias is None:
 		#Just ramp to new HV
-		print 'Set HV = '+str(HVend)
+		print('Set HV = '+str(HVend))
 		changeHVFromTo(iDCRC,HVstart,HVend,HVrampRate,HVrampUpdatePeriod,cals)
 	else:
-		print 'Prebias by ' + str(HVpreBiasPercent) + '% for ' + str(HVpreBiasWait_sec/60.) + ' minutes'
+		print('Prebias by ' + str(HVpreBiasPercent) + '% for ' + str(HVpreBiasWait_sec/60.) + ' minutes')
 		#Ramp to prebias
 		HVpre=round((1.0+HVpreBiasPercent/100.)*HVend,2)
-		print 'Set HVpre = '+str(HVpre)
+		print('Set HVpre = '+str(HVpre))
 		changeHVFromTo(iDCRC,HVstart,HVpre,HVrampRate,HVrampUpdatePeriod,cals)
 		#Wait
-		print 'Waiting '+str(HVpreBiasWait_sec)+' sec'
+		print('Waiting '+str(HVpreBiasWait_sec)+' sec')
 		time.sleep(HVpreBiasWait_sec)
 		#Ramp down to desired HV
-		print 'Set HV = '+str(HVend)
+		print('Set HV = '+str(HVend))
 		changeHVFromTo(iDCRC,HVpre,HVend,HVrampRate,HVrampUpdatePeriod,cals)
 
-	print
+	print('')
 
 
 #This is a work around so this can be called from the command line or another script

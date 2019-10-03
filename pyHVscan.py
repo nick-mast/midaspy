@@ -88,12 +88,12 @@ if __name__ == "__main__":
 	###########################
 	#Sequence
 	###########################
-	print 'HV bias Scan'
-	print 'COMMENT "Command to produce this script was: python '+" ".join(sys.argv[:])+'"'
+	print('HV bias Scan')
+	print('COMMENT "Command to produce this script was: python '+" ".join(sys.argv[:])+'"')
 	pyodbedit.write('/Logger/Write data','y')
 	pyodbedit.write('/Logger/Run duration','0')
 
-	print 'run/flash/cooldown loop'
+	print('run/flash/cooldown loop')
 	#Assume we start at HV=0 with the power supply off	
 	HVcurr=0.0
 	for iHV, HV in enumerate(HVlist):
@@ -113,30 +113,30 @@ if __name__ == "__main__":
 		###########
 		#Take data
 		###########
-		print 'Take Data. Set '+str(iHV+1)+'/'+str(len(HVlist))
+		print('Take Data. Set '+str(iHV+1)+'/'+str(len(HVlist)))
 		pyodbedit.write('/Seriesinfo/Duration (s)',str(tSeries_sec))
 
 		for iSubSeries in range(nSubSeries):
 			if nSubSeries>1:
-				print 'SubSeries '+str(iSubSeries+1)+'/'+str(nSubSeries)
+				print('SubSeries '+str(iSubSeries+1)+'/'+str(nSubSeries))
 
-			print 'Start Run'
+			print('Start Run')
 			pyodbedit.runstart()
 
 			if HVdriftRate==0.0:
 				#No HV drifting
-				print 'Waiting'+ str(tSeries_sec)
+				print('Waiting'+ str(tSeries_sec))
 				time.sleep(tSeries_sec)
 			else:
 				#Drift HV during data taking
-				print 'Drifting HV at '+str(HVdriftRate)+' V/s'
+				print('Drifting HV at '+str(HVdriftRate)+' V/s')
 				HVfinal=HV+HVdriftRate*tSeries_sec
 				changeHVargs=["-iDCRC",str(iDCRC),"-HVstart",str(HV),"-HVend",str(HVfinal),"-HVcalFile",str(HVcalFile),\
 							"-HVrampRate",str(HVdriftRate),"-HVrampUpdatePeriod",str(HVdriftUpdatePeriod)]
 				pyChangeHV.main(changeHVargs)
 				HV=HVfinal
 
-			print 'Stop Run'
+			print('Stop Run')
 			pyodbedit.runstop()
 			
 
@@ -151,26 +151,26 @@ if __name__ == "__main__":
 		###########
 		#Flash & cooldown
 		###########
-		print 'Flash and cooldown'
+		print('Flash and cooldown')
 		#Save 15V power settings and enable
 		DCRC_15VPowerList=pyflash.get15VPowerEnable(DCRCs2FlashList)
 		pyflash.turn15VPowerEnableOn(DCRCs2FlashList)
 
 		#Flash
 		pyflash.enableLEDs(DCRCs2FlashList,1)
-		print 'Wait '+ str(FlashDuration)+ ' sec'
+		print('Wait '+ str(FlashDuration)+ ' sec')
 		time.sleep(FlashDuration)
 		pyflash.enableLEDs(DCRCs2FlashList,0)
 		
 		#Restore previous 15V power state
 		pyflash.set15VPowerEnable(DCRCs2FlashList,DCRC_15VPowerList)
 		#Cooldown
-		print 'Cooldown '+ str(CoolDuration_sec)+' sec'
-		print
+		print('Cooldown '+ str(CoolDuration_sec)+' sec')
+		print('')
 
 	
 	#Return to normal settings
-	print
-	print 'Restore normal settings'
+	print('')
+	print('Restore normal settings')
 	pyodbedit.write('/Logger/Write data','n')
 

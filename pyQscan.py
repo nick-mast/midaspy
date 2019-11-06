@@ -24,7 +24,7 @@ if __name__ == "__main__":
 	#DCRC number	
 	parser.add_argument('-DCRC_S1S2',type=str,help='MIDAS DCRC number of boards controlling Side1 and Side2 Q biases. Format at Side1DCRC/Side2DCRC. e.g. 3/1 for DCRC3 on side1 and DCRC1 on side2.')
 	#Voltage Biases
-	parser.add_argument('-Vs',type=str,help='Bias voltages in desired run order. Format as Side1 V1/Side2 V1,Side1 V2/Side2 V2 etc. e.g. 0/0,5/-5,10/-10')
+	parser.add_argument('-Vs',type=str,help='Bias voltages in desired run order. Format as Side1 V1/Side2 V1,Side1 V2/Side2 V2 etc. e.g. 0/0,5/-5,10/-10. Note, this may have to be input as a string: -Vs=\'-1/1,-3/3\' so that the leading negative bias is not interpreted as an argument flag.')
 	#Series time	
 	parser.add_argument('-tSeries',type=float,help='Run time for each data series in minutes')
 	parser.add_argument('-NsubSeries',type=int,help='Number of subseries (individual MIDAS runs) to break each series into. This feature is for mitigating various DCRC issues which are reset by stopping/starting a new run. Default is None.')
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 		print("Not Running: poe.write('/Logger/Write data','y')")
 	else:
 		poe.write('/Logger/Write data','y')
-	poe.write('/Logger/Run duration',str(tSeries_sec))
+	poe.write('/Logger/Run duration','0')
 
 	print('run/flash/cooldown loop')
 	for iV, V in enumerate(Vlist):
